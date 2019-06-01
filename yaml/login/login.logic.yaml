@@ -1,0 +1,5 @@
+logicId: logicId_login
+description_logic: description_logic_login
+steps:
+  - register?map=map&user=user&password=password&code=code
+  - login?map=map&user=user&password=password

@@ -1,0 +1,7 @@
+logicId: logicId_pay
+description_logic: description_logic_pay
+steps:
+  - register?map=map&user=user&password=password&code=code
+  - login?map=map&user=user&password=password
+  - pay?map=map&orderid=orderid
+  - querypay?map=map&orderid=orderid&state=state
