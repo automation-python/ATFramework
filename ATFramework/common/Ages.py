@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-class Map(object):
+class Ages(object):
     def __getattr__(self, item):
         try:
             return object.__getattribute__(item)
@@ -19,4 +19,4 @@ class Map(object):
                     delattr(self, attr)
         except Exception as e:
             print(e)
-map = Map()
+ages = Ages()

@@ -5,3 +5,5 @@
 from ATFramework import *
 
 projectInit()
+
+projectRun()

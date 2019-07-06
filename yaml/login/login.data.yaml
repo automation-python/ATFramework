@@ -2,6 +2,7 @@ dataId: dataId_login
 logicId: logicId_login
 description_data: description_data_login
 dataItems:
-  user: admin
-  password: admin123456
+  user: 'admin'
+  password: 'admin123456'
   code: 8888
+  islogin: True

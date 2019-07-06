@@ -18,15 +18,10 @@ class TestCase(unittest.TestCase):
         super(TestCase,self).__init__(methodName)
 
         if Var.dataId:
-            for dataId,value in Var.logiclist.items():
-                if Var.dataId in dataId:
-                    setattr(self,"logicId",value["logicId"])
-                    setattr(self,"dataId", value["dataId"])
-                    setattr(self,"description_data", value["description_data"])
-                    setattr(self,"description_logic", value["description_logic"])
-                    setattr(self,"dataPath", value["dataPath"])
-                    setattr(self,"logicPath", value["logicPath"])
-                    setattr(self,"func", value["steps"])
+            for dataId,data in Var.dataCombo_list.items():
+                if Var.dataId == dataId:
+                    for key,value in data.items():
+                        setattr(self,key,value)
 
     def run(self,result=None):
         '''
@@ -35,6 +30,7 @@ class TestCase(unittest.TestCase):
         :return:
         '''
         try:
+            LogInfo('\n')
             LogInfo("******************* TestCase {} Start *******************".format(self.description_data))
             unittest.TestCase.run(self, result)
         except Exception as e:

@@ -24,9 +24,9 @@ def projectInit():
     :return:
     '''
 
-    suite = []
     Var.datalist = []
     Var.logiclist = []
+    Var.dataCombo_list
     pathlsit = []
 
     LogInfo("******************* Start parsing the scripts file *******************")
@@ -38,29 +38,40 @@ def projectInit():
                     LogInfo(scripts_path)
                 pathlsit.append(scripts_path)
 
-    Var.logiclist = getdata(pathlsit)
+    Var.dataCombo_list = getdata(pathlsit)
 
 
     LogInfo("******************* Parsing script path *******************")
     if Var.casePath:
         for path in [scripts.strip() for scripts in Var.casePath.strip().split(",")]:
+            isExists = False
             if path != "":
                 for rt,dirs,files in os.walk(os.path.join(Var.ROOT,"yaml")):
                     if path in files:
                         script = os.path.join(rt,path)
                         if os.path.isfile(script):
                             if "data.yaml" in script:
-                                LogInfo(script)
-                                Var.datalist.append(script)
-                                break
+                                if script not in Var.datalist:
+                                    LogInfo(script)
+                                    Var.datalist.append(script)
+                                    isExists = True
+                            if "logic.yaml" in script:
+                                if script not in Var.logiclist:
+                                    LogInfo(script)
+                                    Var.logiclist.append(script)
+                                    isExists = True
                 for rt, dirs, files in os.walk(os.path.join(Var.ROOT, "yaml")):
                     if path.split(os.sep)[-1] in rt.split(os.sep):
                         for f in files:
                             script = os.path.join(rt,f)
                             if os.path.isfile(script):
                                 if "data.yaml" in script:
-                                    LogInfo(script)
-                                    Var.datalist.append(script)
+                                    if script not in Var.datalist:
+                                        LogInfo(script)
+                                        Var.datalist.append(script)
+                                        isExists = True
+            if not isExists:
+                LogError("{}: does not exist!".format(path),False)
     else:
         for rt, dirs, files in os.walk(os.path.join(Var.ROOT, "yaml")):
             for f in files:
@@ -70,18 +81,35 @@ def projectInit():
                         LogInfo(script)
                         Var.datalist.append(script)
 
-    for data in Var.datalist:
-        for dataId,value in Var.logiclist.items():
-            if data in value["dataPath"]:
-                Var.dataId = dataId
-                subsuite = unittest.TestLoader().loadTestsFromTestCase(TestScripts)
-                suite.append(subsuite)
+
+def projectRun():
+    '''
+    组织用例
+    :return:
+    '''
 
     try:
+
+        suite = []
+        list = []
+        for dataId, value in Var.dataCombo_list.items():
+            for data_path in Var.datalist:
+                if data_path in value["dataPath"]:
+                    if dataId not in list:
+                        list.append(dataId)
+            for logic_path in Var.logiclist:
+                if logic_path in value["logicPath"]:
+                    if dataId not in list:
+                        list.append(dataId)
+
+        for dataId in list:
+            Var.dataId = dataId
+            subsuite = unittest.TestLoader().loadTestsFromTestCase(TestScripts)
+            suite.append(subsuite)
+
+
         if len(suite):
             suite = unittest.TestSuite(tuple(suite))
-            # runner = unittest.TextTestRunner()
-            # runner.run(suite)
             html_file = os.path.join(Var.Report, "report.html")
             fp = open(html_file, "wb")
             html_runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
@@ -90,7 +118,3 @@ def projectInit():
             html_runner.run(suite)
     except Exception as e:
         raise e
-
-
-def projectRun():
-    pass

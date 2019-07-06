@@ -6,7 +6,7 @@ import sys
 import traceback
 import unittest
 from ATFramework.common.Variable import Var
-from ATFramework.common.Map import map
+from ATFramework.common.Ages import ages
 from ATFramework.common.Loging import LogInfo,LogError,Step
 
 

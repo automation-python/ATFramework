@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+import copy
 from ATFramework.runner.TestCase import *
 from ATFramework import *
+from ATFramework.common.Ages import ages
 
 class TestScripts(TestCase):
 
 
     def setUp(self):
-        map.self = self
+        pass
 
     def testCase(self):
         try:
-            for func in self.func:
+            LogInfo(self.steps)
+            for func in self.steps:
                 LogInfo("Step:{}".format(func))
-                map = eval(func)
+                eval(func)
         except Exception as e:
-            raise eval()
+            raise e
 
     def tearDown(self):
-        map.__Delattr__()
+        ages.__Delattr__()
+
 

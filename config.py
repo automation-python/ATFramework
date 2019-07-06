@@ -3,5 +3,5 @@
 # -*- coding: utf-8 -*-
 
 config = {
-    "casePath":"pay"
+    "casePath":""
 }

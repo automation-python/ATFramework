@@ -30,6 +30,7 @@ def getdata(paths):
                     data = yaml.load(f, Loader=yaml.FullLoader)
                     logiclist.append(analytical_logic(data, path, logic_tag))
 
+        analytical_logic_isExists(datalist,logiclist)
         remove_repeat_data(data_tag)
         remove_repeat_logic(logic_tag)
 
@@ -37,8 +38,6 @@ def getdata(paths):
 
     except Exception as e:
         raise e
-
-
 
 def remove_repeat_data(data):
     '''
@@ -48,12 +47,11 @@ def remove_repeat_data(data):
     '''
     if "data_tag" in data:
         list = sorted(set(data["data_tag"]), key=data["data_tag"].index)
-        str = "\n"
+        string = "\n"
         for mesg in list:
-            str = str + "dataId({}) repeat, path: {}\n".format(mesg.split("&#")[0], mesg.split("&#")[1])
+            string = string + "{}: dataId({}) cannot be repeated!\n".format(mesg.split("&#")[1], mesg.split("&#")[0])
 
-        LogError(str)
-
+        LogError(string)
 
 def remove_repeat_logic(logic):
     '''
@@ -63,11 +61,11 @@ def remove_repeat_logic(logic):
     '''
     if "logic_tag" in logic:
         list = sorted(set(logic["logic_tag"]), key=logic["logic_tag"].index)
-        str = "\n"
+        string = "\n"
         for mesg in list:
-            str = str + "logicId({}) repeat, path: {}\n".format(mesg.split("&#")[0], mesg.split("&#")[1])
+            string = string + "{}: logicId({}) cannot be repeated!\n".format(mesg.split("&#")[1], mesg.split("&#")[0])
 
-        LogError(str)
+        LogError(string)
 
 def analytical_data(data,path,data_tag):
     '''
@@ -116,6 +114,23 @@ def analytical_logic(data,path,logic_tag):
         logic_tag[data["logicId"]] = data["logicPath"]
     return {data["logicId"]: data}
 
+def analytical_logic_isExists(datalist,logiclist):
+    '''
+    check if thd logicId exists!
+    :param data:
+    :param logic:
+    :return:
+    '''
+    l_list = []
+    for logic in logiclist:
+        for key in logic:
+            l_list.append(key)
+
+    for data in datalist:
+        for key,value in data.items():
+            if value["logicId"] not in l_list:
+                LogError('{}:logicId({}) does not exist!'.format(value["dataPath"], value["logicId"]))
+
 def analytical(data,logic):
     '''
     关联data logic数据
@@ -126,41 +141,55 @@ def analytical(data,logic):
 
     try:
         analytical_list = {}
-        for d in data:
-            for k,v in d.items():
-                logicId = v["logicId"]
-                for l in logic:
-                    logic_dict = {}
-                    if logicId in l:
-                        logic_dict = copy.deepcopy(l[logicId])
-                        logic_dict["dataId"] = v["dataId"]
-                        logic_dict["dataPath"] = v["dataPath"]
-                        logic_dict["dataItems"] = v["dataItems"]
-                        logic_dict["description_data"] = v["description_data"]
-                        list = []
-                        for step in logic_dict["steps"]:
-                            parameter = {}
-                            func = step.split("?")[0]
-                            args = step.split("?")[1].split("&")
-                            for a in args:
-                                if len(a.split("=")) >= 2:
-                                    parameter[a.split("=")[0]] = a.split("=")[1]
-                                elif len(a.split("=")) >= 1:
-                                    parameter[a.split("=")[0]] = ""
-                            str = ""
-                            for key, value in parameter.items():
-                                if str != "":
-                                    if key in v["dataItems"]:
-                                        str = "{},{}='{}'".format(str,key,v["dataItems"][key])
-                                    else:
-                                        LogError("{}:{} cannot be empty!".format(l[k]["yamlPath"],key))
+        for comboData  in dataCombo(data,logic):
+            steps = []
+            for step in comboData["steps"]:
+                func = step.split("?")[0]
+                args = step.split("?")[1].split("&")
+                for a in args:
+                    if "ages" not in a:
+                        alist = a.split("=")
+                        if len(alist)==2:
+                            if alist[1] in comboData['dataItems'].keys():
+                                a_value = comboData['dataItems'][alist[1]]
+                                if isinstance(a_value,str):
+                                    step = step.replace("={}".format(alist[1]) ,"='{}'".format(a_value))
                                 else:
-                                    str = "{}={}".format(key,"map")
-                            func_ = "{}({})".format(func,str)
-                            list.append(func_)
-                            logic_dict["steps"] = list
-                        analytical_list[k] = logic_dict
+                                    step = step.replace("={}".format(alist[1]), "={}".format(a_value))
+                            else:
+                                LogError('{}: {} cannot be empty!'.format(comboData["logicPath"], a),False)
+                        else:
+                            LogError('{}: {} invalid syntax!'.format(comboData["logicPath"],step))
+                step = step.replace("?", "(").replace("&", ",") + ")"
+                steps.append(step)
+            comboData["steps"] = steps
+            analytical_list[comboData["dataId"]] = comboData
+
         return analytical_list
+
 
     except Exception as e:
         raise e
+
+def dataCombo(data,logic):
+    '''
+    data combo
+    :return:
+    '''
+
+    datalist =[]
+    try:
+        for d in data:
+            for datak, datav in d.items():
+                logicId = datav['logicId']
+                for l in logic:
+                    if logicId in l:
+                        logic_dict = copy.deepcopy(l[logicId])
+                        for key, value in datav.items():
+                            logic_dict[key] = value
+                        datalist.append(logic_dict)
+    except Exception as e:
+        LogError(e)
+
+
+    return datalist
