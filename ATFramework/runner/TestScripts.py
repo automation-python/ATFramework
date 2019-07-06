@@ -15,7 +15,7 @@ class TestScripts(TestCase):
         try:
             LogInfo(self.steps)
             for func in self.steps:
-                LogInfo("Step:{}".format(func))
+                Step(func)
                 eval(func)
         except Exception as e:
             raise e

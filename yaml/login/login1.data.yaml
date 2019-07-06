@@ -1,8 +1,0 @@
-dataId: dataId_login1
-logicId: logicId_login
-description_data: description_data_login1
-dataItems:
-  user: 'admin'
-  password: '***********'
-  code: 8888
-  islogin: True

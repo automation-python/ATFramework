@@ -1,8 +1,7 @@
 dataId: dataId_login
 logicId: logicId_login
-description_data: description_data_login
+description_data: description_login
 dataItems:
-  user: 'admin'
+  userName: 'admin'
   password: 'admin123456'
-  code: 8888
-  islogin: True
+  token: '12312312312'

@@ -1,0 +1,5 @@
+logicId: login_userError
+description_logic: 用户注册成功登录失败
+steps:
+  - register?ages=ages&userName=userName&password=password&authCode=authCode
+  - login?ages=ages&userName=userName&password=password&token=token

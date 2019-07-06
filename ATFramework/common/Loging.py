@@ -53,7 +53,7 @@ def LogError(message,exit=True):
 
 def Step(message):
     Var.CaseStepIndex = Var.CaseStepIndex + 1
-    message = "Step %s: "%str(Var.CaseStepIndex) + message
+    message = "Step %s: "%str(Var.CaseStepIndex) + str(message)
     logger.info(message)
     message_new = time.strftime('%Y-%m-%d %H:%M:%S ', time.localtime(time.time())) + message
     Var.CaseMessage = Var.CaseMessage + "\n" +  message_new

@@ -23,6 +23,9 @@ class TestCase(unittest.TestCase):
                     for key,value in data.items():
                         setattr(self,key,value)
 
+                    self.CurrentCaseName = self.description_logic
+                    Var.CurrentCaseName = self.CurrentCaseName
+
     def run(self,result=None):
         '''
 
@@ -30,8 +33,15 @@ class TestCase(unittest.TestCase):
         :return:
         '''
         try:
+
+            Var.CaseMessage = ""
+            Var.CaseStepIndex = 0
+            Var.SnapshotIndex = 0
+
             LogInfo('\n')
             LogInfo("******************* TestCase {} Start *******************".format(self.description_data))
             unittest.TestCase.run(self, result)
+            LogInfo("********************Total: %s, Pass: %s, Failed: %s, Error: %s ********************" % (
+                Var.Total, Var.Pass, Var.Failed, Var.Error))
         except Exception as e:
             raise e

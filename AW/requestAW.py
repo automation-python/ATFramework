@@ -1,32 +1,45 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from ATFramework import *
+import requests
+import json
 
 
-def register(ages,user,password,code):
-    LogInfo("注册账号")
-    LogInfo("user:{}".format(user))
-    LogInfo("password:{}".format(password))
-    LogInfo("code:{}".format(code))
-    ages.token = "sdasdlf24034893"
+@keywords
+def register(ages,userName,password,authCode):
+
+    Step("注册")
+    url = 'http://47.110.43.11/kasa/user/register'
+    body = {
+        "userName":userName,
+        "password":password,
+        "authCode":authCode
+    }
+    Step('请求参数：{}'.format(body))
+    response = requests.post(url=url,data=body)
+    if response.ok:
+        result = json.loads(response.text)
+        Step('返回参数：{}'.format(result))
+        assert result['code'] == 200
+
     return ages
 
-def login(ages,user,password):
-    LogInfo("登录")
-    if "admin" in user and "admin123456" in password:
-        LogInfo("登录成功！")
-    else:
-        LogInfo("登录失败！")
-    LogInfo(ages.token)
+@keywords
+def login(ages,userName,password,token):
+
+    Step("登录")
+    url = 'http://47.110.43.11/kasa/user/login'
+    headers = {"token":token}
+    body = {
+        "userName":userName,
+        "password":password
+    }
+    Step('请求参数：{}'.format(body))
+    response = requests.post(url=url,data=body,headers=headers)
+    if response.ok:
+        result = json.loads(response.text)
+        Step('返回参数：{}'.format(result))
+        assert result['code'] == 200
+
     return ages
 
-
-def pay(ages,orderid):
-    LogInfo("提交支付")
-    LogInfo(orderid)
-    return ages
-
-def querypay(ages,orderid,state):
-    LogInfo("轮询支付结果")
-    LogInfo(orderid)
-    return ages

@@ -8,6 +8,7 @@ import unittest
 from ATFramework.common.Variable import Var
 from ATFramework.common.Ages import ages
 from ATFramework.common.Loging import LogInfo,LogError,Step
+from ATFramework.runner.Decorator import keywords
 
 
 

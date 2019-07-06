@@ -6,7 +6,7 @@ import yaml
 import copy
 from ATFramework.common.Variable import Var
 from ATFramework.common.Loging import *
-
+import io
 def getdata(paths):
     '''
     处理脚本
@@ -21,12 +21,12 @@ def getdata(paths):
     try:
         for path in paths:
             if "data.yaml" in path:
-                with open(path,"r") as f :
+                with open(path,"r",encoding='utf-8') as f :
                     data = yaml.load(f , Loader=yaml.FullLoader)
                     datalist.append(analytical_data(data,path,data_tag))
 
             if "logic.yaml" in path:
-                with open(path, "r") as f:
+                with open(path, "r",encoding='utf-8') as f:
                     data = yaml.load(f, Loader=yaml.FullLoader)
                     logiclist.append(analytical_logic(data, path, logic_tag))
 

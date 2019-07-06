@@ -1,0 +1,7 @@
+dataId: register_dataId
+logicId: register_logicId
+description_data: description_register
+dataItems:
+  userName: 'guest'
+  password: 'admin123456'
+  authCode: '123456'

@@ -1,7 +1,0 @@
-logicId: logicId_pay
-description_logic: description_logic_pay
-steps:
-  - register?ages=ages&user=user&password=password&code=code
-  - login?ages=ages&user=user&password=password
-  - pay?ages=ages&orderid=orderid
-  - querypay?ages=ages&orderid=orderid&state=state

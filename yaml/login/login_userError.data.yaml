@@ -1,0 +1,8 @@
+dataId: login_userError
+logicId: login_userError
+description_data: login_userError
+dataItems:
+  userName: 'guest'
+  password: 'guest123456'
+  token: '12132131221'
+  authCode: '123456'

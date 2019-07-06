@@ -6,8 +6,13 @@ import unittest
 from ATFramework import *
 from ATFramework.runner import HTMLTestRunner
 from ATFramework.utils.yamlUtils import *
+from ATFramework import xmlrunner
 
 if Var.ROOT:
+    Var.Total = 0
+    Var.Pass = 0
+    Var.Failed = 0
+    Var.Error = 0
     Var.reprot_time = time.strftime('%Y%d%H%M%S',time.localtime(time.time()))
     Var.Report = os.path.join(Var.ROOT,"Report",Var.reprot_time)
 
@@ -92,12 +97,14 @@ def projectRun():
 
         suite = []
         list = []
-        for dataId, value in Var.dataCombo_list.items():
-            for data_path in Var.datalist:
+        for data_path in Var.datalist:
+            for dataId, value in Var.dataCombo_list.items():
                 if data_path in value["dataPath"]:
                     if dataId not in list:
                         list.append(dataId)
-            for logic_path in Var.logiclist:
+
+        for logic_path in Var.logiclist:
+            for dataId, value in Var.dataCombo_list.items():
                 if logic_path in value["logicPath"]:
                     if dataId not in list:
                         list.append(dataId)
@@ -110,11 +117,9 @@ def projectRun():
 
         if len(suite):
             suite = unittest.TestSuite(tuple(suite))
-            html_file = os.path.join(Var.Report, "report.html")
-            fp = open(html_file, "wb")
-            html_runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
-                                                        title=u"测试",
-                                                        description=u"测试")
-            html_runner.run(suite)
+            runner = xmlrunner.XMLTestRunner(verbosity=1)
+            runner.run(suite)
+
+
     except Exception as e:
         raise e
