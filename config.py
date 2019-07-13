@@ -3,5 +3,5 @@
 # -*- coding: utf-8 -*-
 
 config = {
-    "casePath":""
+    "casePath":"login,login_userError.data.yaml,login_userError.logic.yaml"
 }
