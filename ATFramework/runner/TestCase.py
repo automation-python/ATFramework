@@ -41,6 +41,7 @@ class TestCase(unittest.TestCase):
             LogInfo('\n')
             LogInfo("******************* TestCase {} Start *******************".format(self.description_data))
             unittest.TestCase.run(self, result)
+            Var.Total += 1
             LogInfo("********************Total: %s, Pass: %s, Failed: %s, Error: %s ********************" % (
                 Var.Total, Var.Pass, Var.Failed, Var.Error))
         except Exception as e:
