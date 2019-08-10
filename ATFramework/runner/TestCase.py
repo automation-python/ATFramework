@@ -22,9 +22,7 @@ class TestCase(unittest.TestCase):
                 if Var.dataId == dataId:
                     for key,value in data.items():
                         setattr(self,key,value)
-
-                    self.CurrentCaseName = self.description_logic
-                    Var.CurrentCaseName = self.CurrentCaseName
+                    self.SnapshotDir = os.path.join(Var.Report,self.module_name,self.dataId)
 
     def run(self,result=None):
         '''
@@ -42,7 +40,7 @@ class TestCase(unittest.TestCase):
             LogInfo("******************* TestCase {} Start *******************".format(self.description_data))
             unittest.TestCase.run(self, result)
             Var.Total += 1
-            LogInfo("********************Total: %s, Pass: %s, Failed: %s, Error: %s ********************" % (
-                Var.Total, Var.Pass, Var.Failed, Var.Error))
+            LogInfo("********************Total: %s, Pass: %s, Failed: %s, Error: %s, Skipped: %s ********************" % (
+                Var.Total, Var.Pass, Var.Failed, Var.Error,Var.Skip))
         except Exception as e:
             raise e

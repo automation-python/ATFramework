@@ -1,6 +1,7 @@
 dataId: login_userError
 logicId: login_userError
-description_data: login_userError
+module_name: login
+description_data: 登录失败
 dataItems:
   userName: 'guest'
   password: 'guest123456'

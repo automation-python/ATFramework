@@ -2,3 +2,4 @@ logicId: register_logicId
 description_logic: 用户注册
 steps:
   - register?ages=ages&userName=userName&password=password&authCode=authCode
+  - error?ages=ages

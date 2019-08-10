@@ -1,6 +1,7 @@
 dataId: register_dataId
 logicId: register_logicId
-description_data: description_register
+module_name: register
+description_data: 注册方法执行异常
 dataItems:
   userName: 'guest'
   password: 'admin123456'

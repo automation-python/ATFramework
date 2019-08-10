@@ -15,6 +15,9 @@ class TestScripts(TestCase):
         try:
             LogInfo(self.steps)
             for func in self.steps:
+                if 'Skip' in self.dataItems:
+                    if self.dataItems['Skip']:
+                        self.skipTest('Skip')
                 Step(func)
                 eval(func)
         except Exception as e:

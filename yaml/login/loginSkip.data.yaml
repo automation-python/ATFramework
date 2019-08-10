@@ -1,8 +1,9 @@
-dataId: dataId_login
+dataId: dataId_loginSkip
 logicId: logicId_login
 module_name: login
-description_data: 登录成功
+description_data: 跳过执行
 dataItems:
+  Skip: True
   userName: 'admin'
   password: 'admin123456'
   token: '12312312312'

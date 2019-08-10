@@ -3,6 +3,7 @@
 from ATFramework import *
 import requests
 import json
+import time
 
 
 @keywords
@@ -21,7 +22,7 @@ def register(ages,userName,password,authCode):
         result = json.loads(response.text)
         Step('返回参数：{}'.format(result))
         assert result['code'] == 200
-
+    time.sleep(2)
     return ages
 
 @keywords
@@ -40,6 +41,17 @@ def login(ages,userName,password,token):
         result = json.loads(response.text)
         Step('返回参数：{}'.format(result))
         assert result['code'] == 200
-
+    time.sleep(2)
     return ages
 
+
+@keywords
+def error(ages):
+    Step('失败')
+    a = 'test'
+    time.sleep(2)
+    return  a + 1
+
+
+if __name__ == "__main__":
+    pass

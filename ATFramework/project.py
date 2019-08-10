@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
-import time
-import unittest
 from ATFramework import *
-from ATFramework.runner import HTMLTestRunner
 from ATFramework.utils.yamlUtils import *
-from ATFramework import xmlrunner
+from ATFramework.xmlrunner.TestRunner import TestRunner
 
 if Var.ROOT:
     Var.Total = 0
     Var.Pass = 0
     Var.Failed = 0
     Var.Error = 0
+    Var.Skip = 0
     Var.reprot_time = time.strftime('%Y%d%H%M%S',time.localtime(time.time()))
     Var.Report = os.path.join(Var.ROOT,"Report",Var.reprot_time)
 
     LogInfo("Report:{}".format(Var.Report))
     if not os.path.exists(Var.Report):
         os.makedirs(Var.Report)
+        os.makedirs(os.path.join(Var.Report,'resource'))
 
     LogInfo(Loging(logging.INFO))
 
@@ -117,7 +115,7 @@ def projectRun():
 
         if len(suite):
             suite = unittest.TestSuite(tuple(suite))
-            runner = xmlrunner.XMLTestRunner(verbosity=1)
+            runner =TestRunner()
             runner.run(suite)
 
 
