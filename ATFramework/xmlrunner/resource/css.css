@@ -76,12 +76,10 @@
       }
       .module_deta{
           background-color: rgb(240,240,240);
-          border-right: 1px solid rgb(220,220,220);
+          /*border-right: 1px solid rgb(220,220,220);*/
           border-top: 1px solid rgb(220,220,220);
           color: rgb(110,110,110);
-          line-height: 400px;
-          font-weight: normal;
-          text-align:center
+
       }
       .table{
           width: calc(100% - 20px);
@@ -101,6 +99,7 @@
 
       }
 
+
       .Pass{
           background-color: rgba(57, 121, 4, 0.36)
       }
@@ -113,3 +112,71 @@
       .skipped{
           background-color: rgba(121, 111, 112, 0.36)
       }
+
+      .child {
+				float: left;
+				height: 400px;
+				width: calc(50%);
+				/*padding-right: 10px;*/
+				/*
+				 box-sizing
+				 	border-box:设置了 此参数	 width 或者height 就包括了边框
+				 	在盒模型中witdh 和 height 就包括了 border 的大小像素
+
+				 * */
+				box-sizing: border-box;
+
+				background-clip: content-box;
+			}
+
+      .errordiv{
+          margin: 10px;
+          /*margin-top: 0;*/
+          background-color: white;
+          border: 1px solid rgb(220,220,220);
+          width: auto;
+          min-height: 600px;
+          height: auto
+      }
+      .errorp{
+          margin-top: 10px;
+          margin-left: 10px;
+          line-height: 24px;
+          width: auto;
+          vertical-align: middle;
+          text-align: left;
+          color: rgb(110,110,110);
+          font-weight: normal;
+          font-size: 15px;
+          word-wrap:break-word;
+          word-break:normal;
+      }
+
+
+      /*截图*/
+      .SnapshotDiv_root{
+          background-color: white;
+          border: 1px solid rgb(220,220,220);
+          margin: 10px;
+          /*margin: auto;*/
+          width: 80%;
+          height: 550px;
+          /*text-align:center*/
+      }
+
+      .SnapshotDiv_left{
+          background-color: rgb(240,240,240);
+          border-right: 1px solid rgb(220,220,220);
+          /*margin: auto;*/
+          width: auto;
+          height: 500px;
+          /*text-align:center*/
+      }
+
+      .img {
+
+          width: 90%;
+
+          padding-bottom:160%;
+          height: 0;
+        }

@@ -12,17 +12,12 @@ def keywords(func,*args,**kwds):
             else:
                 result = func()
 
-        except AssertionError as e:
-            message = traceback.format_exc()
-            LogError(message,False)
-            raise AssertionError(message)
-
         except Exception as e:
 
             # 获得异常的详细信息
             message = traceback.format_exc()
             LogError(message,False)
-            raise Exception(message)
+            raise e
 
 
         return result

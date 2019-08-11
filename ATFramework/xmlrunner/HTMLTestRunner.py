@@ -131,12 +131,43 @@ class Template_mixin(object):
     '''
 
     # case details
-    CASE_DETA = r'''
+    CASE_DETA_NOT_SNAPSHOT = r'''
                 <tr class='{dataId}' style="display: none">
-                    <td class="module_deta" colspan="6" >{deteils}</td>
+                    <td class="module_deta" colspan="2">
+                        <div class="errordiv">
+                            <p class="errorp">执行信息：</p>
+                            {steplist}
+                        </div>
+                    </td>
+                    <td class="module_deta" colspan="4">
+                        <div class="errordiv">
+                            <p class="errorp">错误信息：</p>
+                            {errlist}
+                        </div>
+                    </td>
                 </tr>
     '''
 
+    CASE_DETA_SNAPSHOT = r'''
+                <tr class='{dataId}' style="display: none">
+                    <td class="module_deta" colspan="3">
+                        <div class="errordiv">
+                            <p class="errorp">执行信息：</p>
+                            <div class="SnapshotDiv_root">
+                                <div class="SnapshotDiv_left">
+                                    <img class="img" src="image/Step 1.jpg">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="module_deta" colspan="3">
+                        <div class="errordiv">
+                            <p class="errorp">错误信息：</p>
+                            {errlist}
+                        </div>
+                    </td>
+                </tr>
+    '''
 
     DEFAULT_TITLE = 'Unit Test Report'
     DEFAULT_DESCRIPTION = ''
@@ -192,39 +223,13 @@ class HTMLTestRunner(Template_mixin):
             for tup_result in cls_results:
                 _status = tup_result[0]
                 testinfo = tup_result[1]
-                err = tup_result[-1]
-                deteils = testinfo.stdout
-                casename = testinfo.casename
-                description_data = testinfo.description_data
-                startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(testinfo.start_time))
-                duration = str(int(testinfo.stop_time - testinfo.start_time)) + 's'
-                status = status_list[_status]
-                dataId = testinfo.dataId
 
-                caseinfo = self.CASE_TMPL.format(
-                    module_name = module_name,
-                    casename = casename,
-                    description_data = description_data,
-                    startTime = startTime,
-                    duration = duration,
-                    status = status,
-                    dataId = dataId,
-                    b_color = status
-                )
-
-                if os.path.exists(testinfo.SnapshotDir):
-                    casedeta = self.CASE_DETA.format(
-                        dataId=dataId,
-                        deteils=deteils
-                    )
-                else:
-                    casedeta = self.CASE_DETA.format(
-                        dataId=dataId,
-                        deteils=deteils
-                    )
-
+                caseinfo = self._generate_case(testinfo, status_list[_status])
                 cls_list.append(caseinfo)
-                cls_list.append(casedeta)
+
+                if _status != 3: # 跳过
+                    casedeta = self._generate_case_deta(testinfo)
+                    cls_list.append(casedeta)
 
                 if _status == 0:
                     Pass += 1
@@ -302,3 +307,56 @@ class HTMLTestRunner(Template_mixin):
                 duration = report_attrs[6]
             )
             return heading
+
+    def _generate_case(self,testinfo,status):
+
+        casename = testinfo.casename
+        description_data = testinfo.description_data
+        startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(testinfo.start_time))
+        duration = str(int(testinfo.stop_time - testinfo.start_time)) + 's'
+        dataId = testinfo.dataId
+        module_name = testinfo.module_name
+
+        caseinfo = self.CASE_TMPL.format(
+            module_name=module_name,
+            casename=casename,
+            description_data=description_data,
+            startTime=startTime,
+            duration=duration,
+            status=status,
+            dataId=dataId,
+            b_color=status
+        )
+        return caseinfo
+
+    def _generate_case_deta(self,testinfo):
+        dataId = testinfo.dataId
+        setps = testinfo.stdout
+        err = testinfo.test_exception_info
+
+        steplist = []
+        errlist= []
+
+
+        for step_P in setps.replace(' ', '&nbsp;').split('\n'):
+            p = '<p class="errorp">{}</p>'.format(step_P)
+            steplist.append(p)
+        for err_P in err.replace(' ', '&nbsp;').split('\n'):
+            p = '<p class="errorp">{}</p>'.format(err_P)
+            errlist.append(p)
+
+
+        if os.path.exists(testinfo.SnapshotDir):
+            casedeta = self.CASE_DETA_SNAPSHOT.format(
+                dataId=dataId,
+                steplist='\n'.join(steplist),
+                errlist='\n'.join(errlist)
+            )
+        else:
+            casedeta = self.CASE_DETA_NOT_SNAPSHOT.format(
+                dataId=dataId,
+                steplist='\n'.join(steplist),
+                errlist='\n'.join(errlist)
+            )
+
+        return casedeta
