@@ -39,6 +39,7 @@
 # 待完善功能
  1. 压力测试
  2. 结果报告展示截图（待完善）、结果报告执行情况图表展示（待完善）
+![Image text](https://github.com/IMJIEG/image/blob/master/report.png)
 
 # 已更新功能
 优化脚本解析
