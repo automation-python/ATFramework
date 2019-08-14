@@ -79,6 +79,7 @@
           /*border-right: 1px solid rgb(220,220,220);*/
           border-top: 1px solid rgb(220,220,220);
           color: rgb(110,110,110);
+          vertical-align: top;
 
       }
       .table{
