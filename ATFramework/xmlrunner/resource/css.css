@@ -1,183 +1,203 @@
+*{
+  margin: 0;
+  padding: 0;
+     }
+   html,body{
+       width: 100%;
+       height: 100%;
+       background-color: rgb(240,240,240)
+     }
+   h1, h2, h3, h4, h5, h6 {
+     color: rgba(0, 0, 0, 0.85);
+     font-weight: 500;
+   }
+   font {
 
-      *{
-	    margin: 0;
-	    padding: 0;
-        }
-      html,body{
-          width: 100%;
-          height: 100%;
-          background-color: rgb(240,240,240)
-        }
+   }
 
-      .root{
-          height: 100%;
-          width: 100%;
-          /*background-color:white;*/
-      }
+   .root{
+       height: 100%;
+       width: 100%;
+       /*background-color:white;*/
+   }
 
-      .title{
-          width: 100%;
-          height:65px;
-          background-color: rgba(64, 64, 64, 0.94);
-      }
-      .content{
-          border: 1px solid rgb(220,220,220);
-          margin: 70px 40px 40px 40px;
-          background-color:white;
-          height: 100%;
-      }
+   .title{
+       width: 100%;
+       height:65px;
+       background-color: rgba(64, 64, 64, 0.94);
+   }
+   .content{
+       border: 1px solid rgb(220,220,220);
+       margin: 70px 40px 40px 40px;
+       background-color:white;
+       height: 100%;
+   }
 
-      .head{
-          margin: 60px 50px 20px 50px;
-          background-color:rgb(240,240,240);
-      }
-      .tabdiv{
-          margin: 30px 50px 20px 50px;
-          background-color:rgb(240,240,240);
-      }
+   .head{
+       margin: 60px 200px 20px 200px;
+       background-color:rgb(240,240,240);
+   }
+   .tabdiv{
+       margin: 30px 200px 20px 200px;
+       background-color:rgb(240,240,240);
+   }
 
-      .text{
-          line-height: 30px;
-          color:rgb(110,110,110);
-          font-size: 15px;
-          margin-left:20px
-          }
-      th {
-          background-color: rgb(240,240,240);
-          border-right: 1px solid rgb(220,220,220);
-          color: rgb(110,110,110);
-          line-height: 28px;
-          font-weight: normal;
+   .text{
+       line-height: 30px;
+       color:rgb(110,110,110);
+       font-size: 15px;
+       margin-left:20px
+       }
+   th {
+       background-color: rgb(240,240,240);
+       border-right: 1px solid rgb(220,220,220);
+       color: rgb(110,110,110);
+       line-height: 28px;
+       font-weight: normal;
 
-      }
-      .module_td{
-          border-right: 1px solid rgb(220,220,220);
-          border-top: 1px solid rgb(220,220,220);
-          color: rgb(110,110,110);
-          line-height: 28px;
-          font-weight: normal;
-          text-align:center
-      }
-      .module_name{
-          border-right: 1px solid rgb(220,220,220);
-          border-top: 1px solid rgb(220,220,220);
-          color: rgb(110,110,110);
-          line-height: 28px;
-          font-weight: normal;
-          text-align:center
-      }
-      .module_td_view{
-          border-right: 1px solid rgb(220,220,220);
-          border-top: 1px solid rgb(220,220,220);
-          color: rgb(110,110,110);
-          line-height: 28px;
-          font-weight: normal;
-          text-align:center
-      }
-      .module_deta{
-          background-color: rgb(240,240,240);
-          /*border-right: 1px solid rgb(220,220,220);*/
-          border-top: 1px solid rgb(220,220,220);
-          color: rgb(110,110,110);
-          vertical-align: top;
+   }
+   .module_td{
+       border-right: 1px solid rgb(220,220,220);
+       border-top: 1px solid rgb(220,220,220);
+       color: rgb(110,110,110);
+       line-height: 28px;
+       font-weight: normal;
+       text-align:center
+   }
+   .module_name{
+       border-right: 1px solid rgb(220,220,220);
+       border-top: 1px solid rgb(220,220,220);
+       color: rgb(110,110,110);
+       line-height: 28px;
+       font-weight: normal;
+       text-align:center
+   }
+   .module_td_view{
+       border-right: 1px solid rgb(220,220,220);
+       border-top: 1px solid rgb(220,220,220);
+       color: rgb(110,110,110);
+       line-height: 28px;
+       font-weight: normal;
+       text-align:center
+   }
+   .module_deta{
+       background-color: rgb(240,240,240);
+       border-right: 1px solid rgb(220,220,220);
+       border-top: 1px solid rgb(220,220,220);
+       color: rgb(110,110,110);
+       vertical-align: top
 
-      }
-      .table{
-          width: calc(100% - 20px);
-          margin: 10px;
-          border: 1px solid rgb(220,220,220);
-          border-right-width: 0px;
-      }
-      .head_title{
-          border: 1px solid rgb(220,220,220);
-          background-color: white;
-          border-bottom-width: 0px;
-          color:rgb(88,88,88);
-          font-size: large;
-          text-indent: 10px;
-          line-height: 30px;
+   }
+   .table{
+       width: calc(100% - 40px);
+       margin: 20px;
+       border: 1px solid rgb(220,220,220);
+       border-right-width: 0;
+   }
+   .head_title{
+       border: 1px solid rgb(220,220,220);
+       background-color: white;
+       border-bottom-width: 0;
+       color:rgb(88,88,88);
+       font-size: large;
+       text-indent: 10px;
+       line-height: 30px;
 
+   }
 
-      }
+   .Pass{
+       background-color: rgba(57, 121, 4, 0.36);
+   }
+   .failure{
+       background-color: rgba(175, 118, 0, 0.36);
+   }
+   .error{
+       background-color: rgba(121, 0, 12, 0.34);
+   }
+   .skipped{
+       background-color: rgba(121, 111, 112, 0.36);
+   }
+   .status{
+       border-radius: 4px;
+       border: 1px solid rgb(220,220,220);
+       padding: 1px;
+   }
 
+   .child {
+	float: left;
+	height: 400px;
+	width: calc(50%);
+	box-sizing: border-box;
+	background-clip: content-box;
+}
 
-      .Pass{
-          background-color: rgba(57, 121, 4, 0.36)
-      }
-      .failure{
-          background-color: rgba(175, 118, 0, 0.36)
-      }
-      .error{
-          background-color: rgba(121, 0, 12, 0.34)
-      }
-      .skipped{
-          background-color: rgba(121, 111, 112, 0.36)
-      }
+   .errordiv{
+       margin: 20px;
+       /*background-color: white;*/
+       /*border: 1px solid rgb(220,220,220);*/
+       width: auto;
+       height: auto;
+       vertical-align: bottom;
 
-      .child {
-				float: left;
-				height: 400px;
-				width: calc(50%);
-				/*padding-right: 10px;*/
-				/*
-				 box-sizing
-				 	border-box:设置了 此参数	 width 或者height 就包括了边框
-				 	在盒模型中witdh 和 height 就包括了 border 的大小像素
-
-				 * */
-				box-sizing: border-box;
-
-				background-clip: content-box;
-			}
-
-      .errordiv{
-          margin: 10px;
-          /*margin-top: 0;*/
-          background-color: white;
-          border: 1px solid rgb(220,220,220);
-          width: auto;
-          min-height: 600px;
-          height: auto
-      }
-      .errorp{
-          margin-top: 10px;
-          margin-left: 10px;
-          line-height: 24px;
-          width: auto;
-          vertical-align: middle;
-          text-align: left;
-          color: rgb(110,110,110);
-          font-weight: normal;
-          font-size: 15px;
-          word-wrap:break-word;
-          word-break:normal;
-      }
+   }
+   .errorp{
+       display: block;
+       padding: 10px;
+       font-size: 13px;
+       color: #333;
+       word-break: break-all;
+       word-wrap: break-word;
+       background-color: white;
+       border-radius: 4px;
+       border: 1px solid rgb(220,220,220);
+       white-space: pre-wrap;
+   }
 
 
-      /*截图*/
-      .SnapshotDiv_root{
-          background-color: white;
-          border: 1px solid rgb(220,220,220);
-          margin: 10px;
-          /*margin: auto;*/
-          width: 80%;
-          height: 550px;
-          /*text-align:center*/
-      }
+   /*æªå¾*/
+   .SnapshotDiv_root{
+       width: 447px;
+       height: auto;
+       display:flex;
+       margin: auto;
+       align-items:stretch;
+       text-align: center;
+   }
 
-      .SnapshotDiv_left{
-          background-color: rgb(240,240,240);
-          border-right: 1px solid rgb(220,220,220);
-          /*margin: auto;*/
-          width: auto;
-          height: 500px;
-          /*text-align:center*/
-      }
+   .SnapshotDiv_right{
+       background-color: white;
+       border-radius: 4px;
+       border: 1px solid rgb(220,220,220);
+       width: 100px;
+       margin-left: 10px;
+       margin-top: 10px;
+       display: inline-block;
+       vertical-align: bottom;
+   }
 
-      .img {
+   .SnapshotDiv_left{
+       width: 337px;
+       margin-top: 10px;
+       height: 100%;
+       display: inline-block;
+       vertical-align: bottom;
+   }
 
-          width: 90%;
+   .img {
+       width: 100%;
+       background-color: greenyellow;
+       display:block;
+     }
 
-          padding-bottom:160%;
-          height: 0;
-        }
+   .stepspan {
+       display: block;
+       position: relative;
+       bottom: 0;
+       background-color: rgba(0, 0, 0, 0.4);
+       word-wrap:break-word;
+       line-height: 1;
+       text-align:left;
+       color: white;
+       padding: 10px;
+       font-size: 13px;
+   }

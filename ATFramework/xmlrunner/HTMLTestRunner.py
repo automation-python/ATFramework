@@ -113,7 +113,7 @@ class Template_mixin(object):
     MODULE_NAME = r'''
                 <tr>
                     <td class="module_td" colspan="2" style=" text-align:left; text-indent: 20px;">{module_name}</td>
-                    <td class="module_td" colspan="3"><span class="Pass">Pass:{Pass}</span> | <span class="failure">failure:{failure}</span> | <span class="error">error:{error}</span> | <span class="skipped">skipped:{skipped}</span></td>
+                    <td class="module_td" colspan="3"><span class="Pass status">&nbsp;Pass:{Pass}&nbsp;</span> | <span class="failure status">&nbsp;failure:{failure}&nbsp;</span> | <span class="error status">&nbsp;error:{error}&nbsp;</span> | <span class="skipped status">&nbsp;skipped:{skipped}&nbsp;</span></td>
                     <td class="module_name" data-tag='{tag_module_name}'>Open</td>
                 </tr>
     '''
@@ -132,38 +132,45 @@ class Template_mixin(object):
 
     # case details
     CASE_DETA_NOT_SNAPSHOT = r'''
-                <tr class='{dataId}' style="display: none">
-                    <td class="module_deta" colspan="2">
+                <tr class="{dataId}" style="display: none">
+                    <td class="module_deta" colspan="2" style="border-right: 0">
                         <div class="errordiv">
-                            <p class="errorp">执行信息：</p>
-                            {steplist}
+                            <h3 style="margin-bottom: 10px">Steps</h3>
+                            <pre class="errorp" style="white-space: pre-wrap;overflow-wrap: break-word;margin-top: 0">{steplist}</pre>
                         </div>
                     </td>
                     <td class="module_deta" colspan="4">
                         <div class="errordiv">
-                            <p class="errorp">错误信息：</p>
-                            {errlist}
+                            <h3 style="margin-bottom: 10px">Logs</h3>
+                            <pre class="errorp" style="white-space: pre-wrap;overflow-wrap: break-word;margin-top: 0">{errlist}</pre>
                         </div>
                     </td>
                 </tr>
     '''
 
     CASE_DETA_SNAPSHOT = r'''
-                <tr class='{dataId}' style="display: none">
-                    <td class="module_deta" colspan="3">
+                <tr class="{dataId}" style="display: none">
+                    <td class="module_deta" colspan="2" style="border-right: 0">
                         <div class="errordiv">
-                            <p class="errorp">执行信息：</p>
+                            <h3 style="margin-bottom: 10px">Steps</h3>
                             <div class="SnapshotDiv_root">
                                 <div class="SnapshotDiv_left">
-                                    <img class="img" src="image/Step 1.jpg">
+                                    <div>
+                                        <img class="img" src="2.jpg">
+                                        <span class="stepspan">
+                                            <p>2019-08-15 20:35:24</p>
+                                            <p>Step 1:Login</p>
+                                        </span>
+                                    </div>
                                 </div>
+                                <div class="SnapshotDiv_right"></div>
                             </div>
                         </div>
                     </td>
-                    <td class="module_deta" colspan="3">
+                    <td class="module_deta" colspan="4">
                         <div class="errordiv">
-                            <p class="errorp">错误信息：</p>
-                            {errlist}
+                            <h3 style="margin-bottom: 10px">Logs</h3>
+                            <pre class="errorp" style="white-space: pre-wrap;overflow-wrap: break-word;margin-top: 0">{errlist}</pre>
                         </div>
                     </td>
                 </tr>
@@ -332,31 +339,33 @@ class HTMLTestRunner(Template_mixin):
     def _generate_case_deta(self,testinfo):
         dataId = testinfo.dataId
         setps = testinfo.stdout
-        err = testinfo.test_exception_info
+        err = '\n' + testinfo.test_exception_info if testinfo.test_exception_info else 'Nothing'
 
-        steplist = []
-        errlist= []
+        # steplist = []
+        # errlist= []
 
 
-        for step_P in setps.replace(' ', '&nbsp;').split('\n'):
-            p = '<p class="errorp">{}</p>'.format(step_P)
-            steplist.append(p)
-        for err_P in err.replace(' ', '&nbsp;').split('\n'):
-            p = '<p class="errorp">{}</p>'.format(err_P)
-            errlist.append(p)
+        # for step_P in setps.replace(' ', '&nbsp;').split('\n'):
+        #     p = '<p class="errorp">{}</p>'.format(step_P)
+        #     steplist.append(p)
+        # for err_P in err.replace(' ', '&nbsp;').split('\n'):
+        #     p = '<p class="errorp">{}</p>'.format(err_P)
+        #     errlist.append(p)
 
+        if err != 'Nothing':
+            os.makedirs(testinfo.SnapshotDir)
 
         if os.path.exists(testinfo.SnapshotDir):
             casedeta = self.CASE_DETA_SNAPSHOT.format(
                 dataId=dataId,
-                steplist='\n'.join(steplist),
-                errlist='\n'.join(errlist)
+                steplist=setps,
+                errlist=err
             )
         else:
             casedeta = self.CASE_DETA_NOT_SNAPSHOT.format(
                 dataId=dataId,
-                steplist='\n'.join(steplist),
-                errlist='\n'.join(errlist)
+                steplist=setps,
+                errlist=err
             )
 
         return casedeta
