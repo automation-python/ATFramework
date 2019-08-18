@@ -161,7 +161,7 @@
        display:flex;
        margin: auto;
        align-items:stretch;
-       text-align: center;
+       /*text-align: center;*/
    }
 
    .SnapshotDiv_right{
@@ -181,13 +181,21 @@
        height: 100%;
        display: inline-block;
        vertical-align: bottom;
+       overflow:hidden;
+       white-space: nowrap;
+       font-size: 0;
+       position:relative;
    }
 
    .img {
        width: 100%;
-       background-color: greenyellow;
+       background-color: white;
        display:block;
+
      }
+   .imgDiv{
+       display: inline-block;
+   }
 
    .stepspan {
        display: block;
@@ -200,4 +208,21 @@
        color: white;
        padding: 10px;
        font-size: 13px;
+       width: 317px;
    }
+   .leftbutton{
+       display: inline;
+       position: absolute;
+       left: 10px;
+       z-index: 1;
+       top: 50%;
+   }
+   .rightbutton{
+       display: inline;
+       right: 10px;
+       position: absolute;
+       z-index: 1;
+
+       top: 50%;
+   }
+

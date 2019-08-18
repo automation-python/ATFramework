@@ -154,13 +154,13 @@ class Template_mixin(object):
                         <div class="errordiv">
                             <h3 style="margin-bottom: 10px">Steps</h3>
                             <div class="SnapshotDiv_root">
-                                <div class="SnapshotDiv_left">
-                                    <div>
-                                        <img class="img" src="2.jpg">
-                                        <span class="stepspan">
-                                            <p>2019-08-15 20:35:24</p>
-                                            <p>Step 1:Login</p>
-                                        </span>
+                                 <div class="SnapshotDiv_left">
+                                    <div style="background-color: rebeccapurple;width: 337px;height: 0">
+                                        <img class="leftbutton" src="resource/last.png" width="30">
+                                        <img class="rightbutton" src="resource/next.png" width="30" >
+                                    </div>
+                                    <div class="imaDivroot">
+                                        {steplist}
                                     </div>
                                 </div>
                                 <div class="SnapshotDiv_right"></div>
@@ -174,6 +174,15 @@ class Template_mixin(object):
                         </div>
                     </td>
                 </tr>
+    '''
+    CASE_SNAPSHOT_DIV = r'''
+                                        <div class="imgDiv" style="transform: translate3d(0px,0px,0px); transition: all 450ms ease-out 0s">
+                                            <img class="img" src="{image}">
+                                            <span class="stepspan">
+                                                <p>{steptime}</p>
+                                                <p>{step}</p>
+                                            </span>
+                                        </div>
     '''
 
     DEFAULT_TITLE = 'Unit Test Report'
@@ -201,6 +210,8 @@ class HTMLTestRunner(Template_mixin):
         resource = os.path.join(os.path.split(os.path.abspath(__file__))[0], "resource")
         shutil.copy(os.path.join(resource,"css.css"), os.path.join(result.Report,'resource'))
         shutil.copy(os.path.join(resource,"js.js"), os.path.join(result.Report,'resource'))
+        shutil.copy(os.path.join(resource, "last.png"), os.path.join(result.Report, 'resource'))
+        shutil.copy(os.path.join(resource, "next.png"), os.path.join(result.Report, 'resource'))
         self.stream.write(output.encode('utf-8'))
 
     def _getReportAttributes(self,result,starttime,stoptime):
@@ -338,7 +349,7 @@ class HTMLTestRunner(Template_mixin):
 
     def _generate_case_deta(self,testinfo):
         dataId = testinfo.dataId
-        setps = testinfo.stdout
+        steps = testinfo.stdout
         err = '\n' + testinfo.test_exception_info if testinfo.test_exception_info else 'Nothing'
 
         # steplist = []
@@ -352,19 +363,44 @@ class HTMLTestRunner(Template_mixin):
         #     p = '<p class="errorp">{}</p>'.format(err_P)
         #     errlist.append(p)
 
+
         if err != 'Nothing':
+            steps = ""
             os.makedirs(testinfo.SnapshotDir)
+            case_snapshot1 = self.CASE_SNAPSHOT_DIV.format(
+                image="image/1.jpg",
+                steptime="2019-08-15 20:35:24",
+                step="Step 1:Login"
+            )
+            case_snapshot2 = self.CASE_SNAPSHOT_DIV.format(
+                image="image/2.jpg",
+                steptime="2019-08-15 20:35:24",
+                step="Step 2:Login"
+            )
+            case_snapshot3 = self.CASE_SNAPSHOT_DIV.format(
+                image="image/3.jpg",
+                steptime="2019-08-15 20:35:24",
+                step="Step 3:Login"
+            )
+            case_snapshot4 = self.CASE_SNAPSHOT_DIV.format(
+                image="image/4.jpg",
+                steptime="2019-08-15 20:35:24",
+                step="Step 4:Login"
+            )
+
+            steps = case_snapshot1+case_snapshot2+case_snapshot3+case_snapshot4
+
 
         if os.path.exists(testinfo.SnapshotDir):
             casedeta = self.CASE_DETA_SNAPSHOT.format(
                 dataId=dataId,
-                steplist=setps,
+                steplist=steps,
                 errlist=err
             )
         else:
             casedeta = self.CASE_DETA_NOT_SNAPSHOT.format(
                 dataId=dataId,
-                steplist=setps,
+                steplist=steps,
                 errlist=err
             )
 
