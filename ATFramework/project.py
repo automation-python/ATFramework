@@ -29,7 +29,7 @@ def projectInit():
 
     Var.datalist = []
     Var.logiclist = []
-    Var.dataCombo_list
+    Var.linkedData_list = []
     pathlsit = []
 
     LogInfo("******************* Start parsing the scripts file *******************")
@@ -41,7 +41,7 @@ def projectInit():
                     LogInfo(scripts_path)
                 pathlsit.append(scripts_path)
 
-    Var.dataCombo_list = getdata(pathlsit)
+    Var.linkedData_list = analyticalData(pathlsit)
 
 
     LogInfo("******************* Parsing script path *******************")
@@ -96,14 +96,14 @@ def projectRun():
         suite = []
         list = []
         for data_path in Var.datalist:
-            for dataId, value in Var.dataCombo_list.items():
-                if data_path in value["dataPath"]:
+            for dataId, value in Var.linkedData_list.items():
+                if data_path in value.dataPath:
                     if dataId not in list:
                         list.append(dataId)
 
         for logic_path in Var.logiclist:
-            for dataId, value in Var.dataCombo_list.items():
-                if logic_path in value["logicPath"]:
+            for dataId, value in Var.linkedData_list.items():
+                if logic_path in value.logicPath:
                     if dataId not in list:
                         list.append(dataId)
 

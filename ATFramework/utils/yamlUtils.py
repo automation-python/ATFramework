@@ -1,195 +1,165 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import yaml
 import copy
-from ATFramework.common.Variable import Var
+import collections
 from ATFramework.common.Loging import *
-import io
-def getdata(paths):
+
+class StrKeyDict(collections.UserDict):
+    def __missing__(self, key):
+        if isinstance(key,str):
+            raise  KeyError(key)
+        return self[str(key)]
+
+    def __contains__(self, item):
+        return str(item) in self.data
+
+
+    def __setitem__(self, key, value):
+        if isinstance(value,dict):
+            _item = StrKeyDict()
+            for _key ,_value in value.items():
+                _item[_key] = _value
+            self.data[str(key)] = _item
+        else:
+            self.data[str(key)] = value
+
+    def __getattr__(self, item):
+        if item in self:
+            return self[str(item)]
+        else:
+            return None
+
+def analyticalData(paths):
     '''
-    处理脚本
+    解析文件
     :param paths:
     :return:
     '''
 
+    alllist = []
+    for path in paths:
+        with open(path, "r", encoding='utf-8') as f:
+            data = yaml.load(f, Loader=yaml.FullLoader)
+            dict_ = StrKeyDict()
+            for key ,value in data.items():
+                dict_[key] = value
+            alllist.append((dict_,path))
+
+    return separatedData(alllist)
+
+
+def separatedData(alllist):
+    '''
+    分离数据
+    :param alllist:
+    :return:
+    '''
     datalist = []
     logiclist = []
-    data_tag = {}
-    logic_tag = {}
-    try:
-        for path in paths:
-            if "data.yaml" in path:
-                with open(path,"r",encoding='utf-8') as f :
-                    data = yaml.load(f , Loader=yaml.FullLoader)
-                    datalist.append(analytical_data(data,path,data_tag))
+    dataId_tag = []
+    logicId_tag = []
+    for data ,path in alllist:
+        if data.dataId:
+            data['dataPath'] = path
+            datalist.append(data)
+            dataId_tag.append(data.dataId)
+        elif data.logicId:
+            data['logicPath'] = path
+            logiclist.append(data)
+            logicId_tag.append(data.dataId)
+        else:
+            LogError("{}:The dataId or logicId cannot be empty!".format(path))
 
-            if "logic.yaml" in path:
-                with open(path, "r",encoding='utf-8') as f:
-                    data = yaml.load(f, Loader=yaml.FullLoader)
-                    logiclist.append(analytical_logic(data, path, logic_tag))
+    logicIdisExists(datalist,logiclist)
+    getDuplicatedataId(dataId_tag,datalist)
+    getDuplicatelogicId(logicId_tag,logiclist)
+    return linkedData(datalist,logiclist)
 
-        analytical_logic_isExists(datalist,logiclist)
-        remove_repeat_data(data_tag)
-        remove_repeat_logic(logic_tag)
-
-        return analytical(datalist,logiclist)
-
-    except Exception as e:
-        raise e
-
-def remove_repeat_data(data):
+def logicIdisExists(datalist,logiclist):
     '''
-    去重 dataId
-    :param data:
-    :return:
-    '''
-    if "data_tag" in data:
-        list = sorted(set(data["data_tag"]), key=data["data_tag"].index)
-        string = "\n"
-        for mesg in list:
-            string = string + "{}: dataId({}) cannot be repeated!\n".format(mesg.split("&#")[1], mesg.split("&#")[0])
-
-        LogError(string)
-
-def remove_repeat_logic(logic):
-    '''
-    去重 logicId
-    :param logic:
-    :return:
-    '''
-    if "logic_tag" in logic:
-        list = sorted(set(logic["logic_tag"]), key=logic["logic_tag"].index)
-        string = "\n"
-        for mesg in list:
-            string = string + "{}: logicId({}) cannot be repeated!\n".format(mesg.split("&#")[1], mesg.split("&#")[0])
-
-        LogError(string)
-
-def analytical_data(data,path,data_tag):
-    '''
-    获取重复的dataId
-    :param data:
-    :param path:
-    :param data_tag:
-    :return:
-    '''
-
-    if not data["logicId"]:
-        LogError("{}:The logicId connot be empty!".format(path))
-
-    if not data["dataId"]:
-        LogError("{}:The dataId connot be empty!".format(path))
-
-    data["dataPath"] = path
-    if data["dataId"] in data_tag:
-        if "data_tag" not in data_tag:
-            data_tag["data_tag"] = []
-        data_tag["data_tag"].append("{}&#{}".format(data["dataId"],data_tag[data["dataId"]]))
-        data_tag["data_tag"].append("{}&#{}".format(data["dataId"], data["dataPath"]))
-    else:
-        data_tag[data["dataId"]] = data["dataPath"]
-    return {data["dataId"]:data}
-
-def analytical_logic(data,path,logic_tag):
-    '''
-    获取重复的logicId
-    :param data:
-    :param path:
-    :param logic_tag:
-    :return:
-    '''
-
-    if not data["logicId"]:
-        LogError("{}:The logicId connot be empty!".format(path))
-
-    data["logicPath"] = path
-    if data["logicId"] in logic_tag:
-        if "logic_tag" not in logic_tag:
-            logic_tag["logic_tag"] = []
-            logic_tag["logic_tag"].append("{}&#{}".format(data["logicId"], logic_tag[data["logicId"]]))
-            logic_tag["logic_tag"].append("{}&#{}".format(data["logicId"], data["logicPath"]))
-    else:
-        logic_tag[data["logicId"]] = data["logicPath"]
-    return {data["logicId"]: data}
-
-def analytical_logic_isExists(datalist,logiclist):
-    '''
-    check if thd logicId exists!
-    :param data:
-    :param logic:
+    判断logicId是否存在
+    :param datalist:
+    :param logiclist:
     :return:
     '''
     l_list = []
     for logic in logiclist:
-        for key in logic:
-            l_list.append(key)
-
+        l_list.append(logic.logicId)
     for data in datalist:
-        for key,value in data.items():
-            if value["logicId"] not in l_list:
-                LogError('{}:logicId({}) does not exist!'.format(value["dataPath"], value["logicId"]))
+        if data.logicId not in l_list:
+            LogError("{}:logicId({}) does not exist!".format(data.dataPath,data.logicId))
 
-def analytical(data,logic):
+
+def getDuplicatelogicId(logicId_tag,logiclist):
     '''
-    关联data logic数据
-    :param data:
-    :param logic:
+    获取重复的logicId
+    :param logicId_tag:
+    :param logiclist:
     :return:
     '''
+    for logicId in [val for val in list(set(logicId_tag)) if logicId_tag.count(val) ==2]:
+        string = '\n'
+        for logic in logiclist:
+            if logicId == logic.logicId:
+                string = string + "{}:logicId({}) cannot be repeated!".format(logicId,logic.logicPath)
+        LogError(string)
 
-    try:
-        analytical_list = {}
-        for comboData  in dataCombo(data,logic):
-            steps = []
-            for step in comboData["steps"]:
-                func = step.split("?")[0]
-                args = step.split("?")[1].split("&")
-                for a in args:
-                    if "ages" not in a:
-                        alist = a.split("=")
-                        if len(alist)==2:
-                            if alist[1] in comboData['dataItems'].keys():
-                                a_value = comboData['dataItems'][alist[1]]
-                                if isinstance(a_value,str):
-                                    step = step.replace("={}".format(alist[1]) ,"='{}'".format(a_value))
-                                else:
-                                    step = step.replace("={}".format(alist[1]), "={}".format(a_value))
+def getDuplicatedataId(dataId_tag, datalist):
+    '''
+    获取重复的dataId
+    :param dataId_tag:
+    :param datalist:
+    :return:
+    '''
+    for dataId in [val for val in list(set(dataId_tag)) if dataId_tag.count(val) ==2]:
+        string = '\n'
+        for data in datalist:
+            if dataId == data.dataId:
+                string = string + "{}:dataId({}) cannot be repeated!".format(dataId,data.dataPath)
+        LogError(string)
+
+def linkedData(datalist,logiclist):
+    '''
+    关联数据
+    :param datalist:
+    :param logiclist:
+    :return:
+    '''
+    linkedData_list = StrKeyDict()
+    logic_linkedData_list = []
+    for data in datalist:
+        for logic in logiclist:
+            if data.logicId == logic.logicId:
+                dict = StrKeyDict()
+                for key,value in data.items():
+                    dict[key] = value
+                for _key,_value in logic.items():
+                    dict[_key] = _value
+                logic_linkedData_list.append(dict)
+
+    for logic in logic_linkedData_list:
+        steps = []
+        for step in logic.steps:
+            args = step.split("?")[1].split("&")
+            for a in args:
+                if "ages" not in a:
+                    alist = a.split("=")
+                    if len(alist) == 2:
+                        if alist[-1] in logic.dataItems.keys():
+                            a_value = logic.dataItems[alist[-1]]
+                            if isinstance(a_value,str):
+                                step = step.replace("={}".format(alist[-1]), "='{}'".format(a_value))
                             else:
-                                LogError('{}: {} cannot be empty!'.format(comboData["logicPath"], a),False)
+                                step = step.replace("={}".format(alist[-1]), "={}".format(a_value))
                         else:
-                            LogError('{}: {} invalid syntax!'.format(comboData["logicPath"],step))
-                step = step.replace("?", "(").replace("&", ",") + ")"
-                steps.append(step)
-            comboData["steps"] = steps
-            analytical_list[comboData["dataId"]] = comboData
+                            LogError('{}: {} cannot be empty!'.format(logic.logicPath, a), False)
+                    else:
+                        LogError('{}: {} invalid syntax!'.format(logic.logicPath, step))
+            step = step.replace("?", "(").replace("&", ",") + ")"
+            steps.append(step)
+        logic["steps"] = steps
+        linkedData_list[logic.dataId] = logic
+    return linkedData_list
 
-        return analytical_list
-
-
-    except Exception as e:
-        raise e
-
-def dataCombo(data,logic):
-    '''
-    data combo
-    :return:
-    '''
-
-    datalist =[]
-    try:
-        for d in data:
-            for datak, datav in d.items():
-                logicId = datav['logicId']
-                for l in logic:
-                    if logicId in l:
-                        logic_dict = copy.deepcopy(l[logicId])
-                        for key, value in datav.items():
-                            logic_dict[key] = value
-                        datalist.append(logic_dict)
-    except Exception as e:
-        LogError(e)
-
-
-    return datalist

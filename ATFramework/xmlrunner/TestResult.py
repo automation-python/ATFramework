@@ -97,7 +97,6 @@ class TestResult(unittest.TextTestResult):
         '''
         super(TestResult,self).addSuccess(test)
         self._save_output_data()
-        Var.Pass += 1
         testinfo = self.infoclass(self,test,self.infoclass.SUCCESS)
         self.result.append((self.infoclass.SUCCESS,testinfo,''))
         self.successes.append(testinfo)
@@ -109,7 +108,6 @@ class TestResult(unittest.TextTestResult):
         '''
         super(TestResult,self).addError(test,err)
         self._save_output_data()
-        Var.Error += 1
         testinfo = self.infoclass(self,test,self.infoclass.ERROR,err)
         _exc_str = self._exc_info_to_string(err,test)
         self.result.append((self.infoclass.ERROR,testinfo,_exc_str))
@@ -121,7 +119,6 @@ class TestResult(unittest.TextTestResult):
         '''
         super(TestResult,self).addFailure(test,err)
         self._save_output_data()
-        Var.Failed += 1
         testinfo = self.infoclass(self,test,self.infoclass.FAILURE,err)
         _exc_str = self._exc_info_to_string(err,test)
         self.result.append((self.infoclass.FAILURE,testinfo,_exc_str))
@@ -133,7 +130,6 @@ class TestResult(unittest.TextTestResult):
         '''
         super(TestResult,self).addSkip(test,reason)
         self._save_output_data()
-        Var.Skip += 1
         testinfo = self.infoclass(self,test,self.infoclass.SKIP,reason)
         self.result.append((self.infoclass.SKIP,testinfo,reason))
 
@@ -145,7 +141,6 @@ class TestResult(unittest.TextTestResult):
         '''
         super(TestResult, self).addFailure(test, err)
         self._save_output_data()
-        Var.Failed += 1
         testinfo = self.infoclass(self, test, self.infoclass.FAILURE, err)
         _exc_str = self._exc_info_to_string(err, test)
         self.result.append((self.infoclass.FAILURE, testinfo, _exc_str))

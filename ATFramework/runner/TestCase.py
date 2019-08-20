@@ -18,7 +18,7 @@ class TestCase(unittest.TestCase):
         super(TestCase,self).__init__(methodName)
 
         if Var.dataId:
-            for dataId,data in Var.dataCombo_list.items():
+            for dataId,data in Var.linkedData_list.items():
                 if Var.dataId == dataId:
                     for key,value in data.items():
                         setattr(self,key,value)
@@ -39,8 +39,7 @@ class TestCase(unittest.TestCase):
             LogInfo('\n')
             LogInfo("******************* TestCase {} Start *******************".format(self.description_data))
             unittest.TestCase.run(self, result)
-            Var.Total += 1
             LogInfo("********************Total: %s, Pass: %s, Failed: %s, Error: %s, Skipped: %s ********************" % (
-                Var.Total, Var.Pass, Var.Failed, Var.Error,Var.Skip))
+                result.testsRun,len(result.successes),len(result.failures),len(result.errors),len(result.skipped)))
         except Exception as e:
             raise e
