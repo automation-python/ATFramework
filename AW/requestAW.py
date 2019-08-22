@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ATFramework import *
+from framework import *
 import requests
 import json
 import time

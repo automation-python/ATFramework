@@ -329,7 +329,7 @@ class HTMLTestRunner(Template_mixin):
     def _generate_case(self,testinfo,status):
 
         casename = testinfo.casename
-        description_data = testinfo.description_data
+        description = testinfo.description
         startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(testinfo.start_time))
         duration = str(int(testinfo.stop_time - testinfo.start_time)) + 's'
         dataId = testinfo.dataId
@@ -338,7 +338,7 @@ class HTMLTestRunner(Template_mixin):
         caseinfo = self.CASE_TMPL.format(
             module_name=module_name,
             casename=casename,
-            description_data=description_data,
+            description_data=description,
             startTime=startTime,
             duration=duration,
             status=status,
@@ -351,52 +351,20 @@ class HTMLTestRunner(Template_mixin):
         dataId = testinfo.dataId
         steps = testinfo.stdout
         err = '\n' + testinfo.test_exception_info if testinfo.test_exception_info else 'Nothing'
-
-        # steplist = []
-        # errlist= []
-
-
-        # for step_P in setps.replace(' ', '&nbsp;').split('\n'):
-        #     p = '<p class="errorp">{}</p>'.format(step_P)
-        #     steplist.append(p)
-        # for err_P in err.replace(' ', '&nbsp;').split('\n'):
-        #     p = '<p class="errorp">{}</p>'.format(err_P)
-        #     errlist.append(p)
-
-
-        if err != 'Nothing':
+        if testinfo.SnapshotDir and os.path.exists(testinfo.SnapshotDir):
+            path = testinfo.SnapshotDir.split(testinfo.module_name)[-1]
             steps = ""
-            os.makedirs(testinfo.SnapshotDir)
-            case_snapshot1 = self.CASE_SNAPSHOT_DIV.format(
-                image="image/1.jpg",
-                steptime="2019-08-15 20:35:24",
-                step="Step 1:Login"
-            )
-            case_snapshot2 = self.CASE_SNAPSHOT_DIV.format(
-                image="image/2.jpg",
-                steptime="2019-08-15 20:35:24",
-                step="Step 2:Login"
-            )
-            case_snapshot3 = self.CASE_SNAPSHOT_DIV.format(
-                image="image/3.jpg",
-                steptime="2019-08-15 20:35:24",
-                step="Step 3:Login"
-            )
-            case_snapshot4 = self.CASE_SNAPSHOT_DIV.format(
-                image="image/4.jpg",
-                steptime="2019-08-15 20:35:24",
-                step="Step 4:Login"
-            )
-
-            steps = case_snapshot1+case_snapshot2+case_snapshot3+case_snapshot4
+            for rt,dirs,files in os.walk(testinfo.SnapshotDir):
+                for f in files:
+                    f_path = testinfo.module_name + os.path.join(path,f)
+                    case_snapshot = self.CASE_SNAPSHOT_DIV.format(
+                        image=f_path,
+                        steptime="",
+                        step=f
+                    )
+                    steps = steps + case_snapshot
 
 
-        if os.path.exists(testinfo.SnapshotDir):
-            casedeta = self.CASE_DETA_SNAPSHOT.format(
-                dataId=dataId,
-                steplist=steps,
-                errlist=err
-            )
         else:
             casedeta = self.CASE_DETA_NOT_SNAPSHOT.format(
                 dataId=dataId,

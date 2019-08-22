@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import copy
-from ATFramework.runner.TestCase import *
-from ATFramework import *
-from ATFramework.common.Ages import ages
+from framework.runner.TestCase import *
+from framework import *
+from framework import LogInfo,Step,ages
 
 class TestScripts(TestCase):
 

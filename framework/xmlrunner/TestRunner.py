@@ -6,7 +6,7 @@ import time
 import unittest
 from .TestResult import TestResult
 from .HTMLTestRunner import HTMLTestRunner
-from ATFramework.common.Variable import Var
+from framework.common.Variable import Var
 
 
 class TestRunner(unittest.TextTestRunner):

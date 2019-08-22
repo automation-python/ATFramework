@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
+import traceback
 import unittest
-from ATFramework import *
+from framework import Var , LogInfo
 
 class TestCase(unittest.TestCase):
 
@@ -22,7 +24,6 @@ class TestCase(unittest.TestCase):
                 if Var.dataId == dataId:
                     for key,value in data.items():
                         setattr(self,key,value)
-                    self.SnapshotDir = os.path.join(Var.Report,self.module_name,self.dataId)
 
     def run(self,result=None):
         '''

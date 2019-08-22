@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ATFramework import *
-from ATFramework.utils.yamlUtils import *
-from ATFramework.xmlrunner.TestRunner import TestRunner
+from framework import *
+from framework.utils.yamlUtils import *
+from framework.xmlrunner.TestRunner import TestRunner
 
 if Var.ROOT:
     Var.Total = 0
@@ -63,7 +63,6 @@ def projectInit():
                                     LogInfo(script)
                                     Var.logiclist.append(script)
                                     isExists = True
-                for rt, dirs, files in os.walk(os.path.join(Var.ROOT, "yaml")):
                     if path.split(os.sep)[-1] in rt.split(os.sep):
                         for f in files:
                             script = os.path.join(rt,f)

@@ -4,7 +4,7 @@ import os
 import sys
 import time
 import logging
-from ATFramework.common.Variable import Var
+from framework.common.Variable import Var
 from logging.handlers import RotatingFileHandler
 
 logger = None

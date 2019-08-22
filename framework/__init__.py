@@ -4,11 +4,10 @@ import inspect
 import os
 import sys
 import traceback
-import unittest
-from ATFramework.common.Variable import Var
-from ATFramework.common.Ages import ages
-from ATFramework.common.Loging import LogInfo,LogError,Step
-from ATFramework.runner.Decorator import keywords
+from framework.common.Variable import Var
+from framework.common.Ages import ages
+from framework.common.Loging import LogInfo,LogError,Step
+from framework.runner.Decorator import keywords
 
 
 
@@ -36,5 +35,5 @@ if Var.ROOT:
     except Exception as e:
         traceback.print_exc()
 
-from ATFramework.runner.TestScripts import *
-from ATFramework.project import *
+from framework.runner.TestScripts import *
+from framework.project import *

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 import time
 import unittest
-from ATFramework.common.Variable import Var
+from framework import Var,LogError
 
 def testcase_name(test_method):
     testcase = type(test_method)
@@ -39,11 +40,10 @@ class _TestInfo(object):
                     self.err, test_method)
         )
         self.dataId = test_method.dataId
-        self.casename = test_method.dataPath.split('\\')[-1]
+        self.casename = test_method.dataPath.split(os.sep)[-1]
         self.SnapshotDir = test_method.SnapshotDir
         self.module_name = test_method.module_name
-        self.description_logic = test_method.description_logic
-        self.description_data = test_method.description_data
+        self.description = test_method.description_data
         self.test_name = testcase_name(test_method)
         self.test_id = test_method.id()
 
@@ -110,6 +110,7 @@ class TestResult(unittest.TextTestResult):
         self._save_output_data()
         testinfo = self.infoclass(self,test,self.infoclass.ERROR,err)
         _exc_str = self._exc_info_to_string(err,test)
+        LogError(_exc_str,False)
         self.result.append((self.infoclass.ERROR,testinfo,_exc_str))
 
     def addFailure(self, test, err):
@@ -121,6 +122,7 @@ class TestResult(unittest.TextTestResult):
         self._save_output_data()
         testinfo = self.infoclass(self,test,self.infoclass.FAILURE,err)
         _exc_str = self._exc_info_to_string(err,test)
+        LogError(_exc_str, False)
         self.result.append((self.infoclass.FAILURE,testinfo,_exc_str))
 
     def addSkip(self, test, reason):
@@ -143,5 +145,6 @@ class TestResult(unittest.TextTestResult):
         self._save_output_data()
         testinfo = self.infoclass(self, test, self.infoclass.FAILURE, err)
         _exc_str = self._exc_info_to_string(err, test)
+        LogError(_exc_str, False)
         self.result.append((self.infoclass.FAILURE, testinfo, _exc_str))
 
