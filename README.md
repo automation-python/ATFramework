@@ -1,5 +1,5 @@
 # ATFramework
-一个慢慢完善的接口自动化框架
+
 
 ----------
 # 环境依赖
@@ -26,7 +26,8 @@
     │   ├── commoe                  
     │   ├── runner                 
     │   ├── utils
-    │   ├── project
+    │   ├── xmlrunner
+    |   ├── project
     ├── AW                          // 接口具体实现
     ├── Report                      // 结果报告
     ├── Scripts                     // 待定
@@ -34,15 +35,12 @@
     
 ----------
 # 框架思路
-暂无
+脚本分为data（数据文件）和logic（逻辑文件），用户需自己实现接口请求部分，通过casePath配置可实现单个接口或者整个流程所有接口的调用
 
 # 待完善功能
  1. 压力测试
- 2. 结果报告展示截图（待完善）、结果报告执行情况图表展示（待完善）
-![Image text](https://github.com/IMJIEG/image/blob/master/report.png)
 
-# 已更新功能
-优化脚本解析
-1. 脚本路径支持“”（全量执行）、data、logic、文件夹路径执行，可自动去重
+# 已支持功能
+1. 脚本路径支持“”（全量执行）、data、logic、文件夹路径执行
 2. 支持logic文件多对一，casePath为logic文件路径时，可解析所有对应data文件
-3. 优化结果报告展示
+3. 结果报告展示
